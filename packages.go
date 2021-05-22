@@ -9,6 +9,14 @@ func (me Packages) Len() int           { return len(me) }
 func (me Packages) Swap(i, j int)      { me[i], me[j] = me[j], me[i] }
 func (me Packages) Less(i, j int) bool { return me[i].weight > me[j].weight }
 
+func NewPackages(pkgs ...*Package) Packages {
+	packages := Packages{}
+	for _, v := range pkgs {
+		packages = append(packages, v)
+	}
+	return packages
+}
+
 // GetTotalWeight
 // Iterates through the package and calculates the weight of packages.
 // @returns total weight of the given packages

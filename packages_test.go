@@ -1,6 +1,7 @@
 package main
 
 import (
+	"sort"
 	"testing"
 )
 
@@ -28,5 +29,28 @@ func TestSetAndGetDeliveryTimeForPackages(t *testing.T) {
 	expectedTotalDeliveryTime := float32(40 / 10) // (maximum distance)/ (maxSpeed)
 	if totalDeliveryTime != expectedTotalDeliveryTime {
 		t.Fatal("something went wrong while calculating the total delivery time of packages")
+	}
+}
+
+// Test sorting of packages.
+func TestSortPackages(t *testing.T) {
+
+	expectedMaxWeighPackage := 175
+	expectedMinWeighPackage := 50
+
+	pkg1 := NewPackage("PKG1", 100, 30, 50, allDiscounts().getDiscountByCoupon("OFR001"))
+	pkg2 := NewPackage("PKG2", 100, 125, 75, allDiscounts().getDiscountByCoupon("OFR008"))
+	pkg3 := NewPackage("PKG3", 100, 100, 175, allDiscounts().getDiscountByCoupon("OFR003"))
+	pkg4 := NewPackage("PKG4", 100, 60, 110, allDiscounts().getDiscountByCoupon("OFR002"))
+	pkg5 := NewPackage("PKG5", 100, 95, 155, allDiscounts().getDiscountByCoupon("NA"))
+
+	allPackages := NewPackages(pkg1, pkg2, pkg3, pkg4, pkg5)
+	sort.Sort(allPackages)
+	if allPackages[0].weight != expectedMaxWeighPackage {
+		t.Fatal("sorting of descending failed")
+	}
+
+	if allPackages[4].weight != expectedMinWeighPackage {
+		t.Fatal("sorting of descending failed")
 	}
 }

@@ -24,14 +24,7 @@ func getAllPackages_test() Packages {
 	return allPackages
 }
 
-func TestSortPackages(t *testing.T) {
-
-	allPackages := getAllPackages_test()
-	sort.Sort(allPackages)
-	if allPackages[0].id != "PKG3" {
-		t.Fatalf("sorting of descending failed")
-	}
-}
+//Test case to debug problem2
 
 func TestGetPackagesForVehicle(t *testing.T) {
 	allPackages := getAllPackages_test()
