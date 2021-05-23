@@ -1,27 +1,27 @@
-package main
+package delivery
 
 // Package
 // Package details
 type Package struct {
-	id           string
-	distance     int
-	weight       int
-	baseCost     int
-	totalCost    int
-	discountCost int
-	deliveryTime float32
-	discount     *Discount
+	Id           string
+	Distance     int
+	Weight       int
+	BaseCost     int
+	TotalCost    int
+	DiscountCost int
+	DeliveryTime float32
+	Discounts    Discounts
 }
 
 // NewPackage
 // Creates the New Package and returns the Package.
-func NewPackage(id string, baseCost, distance, weight int, discount *Discount) *Package {
+func NewPackage(id string, baseCost, distance, weight int, discounts Discounts) *Package {
 	return &Package{
-		id:       id,
-		baseCost: baseCost,
-		distance: distance,
-		weight:   weight,
-		discount: discount,
+		Id:        id,
+		BaseCost:  baseCost,
+		Distance:  distance,
+		Weight:    weight,
+		Discounts: discounts,
 	}
 }
 
@@ -33,8 +33,11 @@ func NewPackage(id string, baseCost, distance, weight int, discount *Discount) *
 // 3. package distance should be lesser or equals to discount maximum package distance
 func (me *Package) IsDiscountApplicable() bool {
 
-	if me.discount != nil {
-		if me.discount.minPackageWeight <= me.weight && me.weight <= me.discount.maxPackageWeight && me.discount.minDestinationDistance <= me.distance && me.distance <= me.discount.maxDestinationDistance {
+	for _, discount := range me.Discounts {
+		if discount.MinPackageWeight <= me.Weight &&
+			me.Weight <= discount.MaxPackageWeight &&
+			discount.MinDestinationDistance <= me.Distance &&
+			me.Distance <= discount.MaxDestinationDistance {
 			return true
 		}
 	}
@@ -46,9 +49,9 @@ func (me *Package) IsDiscountApplicable() bool {
 // Formulae:
 // totalCost_of_Package = (base_cost + (package_weight * 10) + (package_distance * 5)) - discountPrice
 func (me *Package) CalculateDeliveryCost() {
-	totalCost := me.baseCost + (me.weight * 10) + (me.distance * 5)
+	totalCost := me.BaseCost + (me.Weight * 10) + (me.Distance * 5)
 	if me.IsDiscountApplicable() {
-		me.discountCost = me.discount.calculateDiscountAmount(totalCost)
+		me.DiscountCost = me.Discounts.calculateDiscountAmount(totalCost)
 	}
-	me.totalCost = totalCost - me.discountCost
+	me.TotalCost = totalCost - me.DiscountCost
 }

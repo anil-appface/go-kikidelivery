@@ -1,4 +1,4 @@
-package main
+package delivery
 
 import (
 	"sort"
@@ -38,19 +38,19 @@ func TestSortPackages(t *testing.T) {
 	expectedMaxWeighPackage := 175
 	expectedMinWeighPackage := 50
 
-	pkg1 := NewPackage("PKG1", 100, 30, 50, allDiscounts().getDiscountByCoupon("OFR001"))
-	pkg2 := NewPackage("PKG2", 100, 125, 75, allDiscounts().getDiscountByCoupon("OFR008"))
-	pkg3 := NewPackage("PKG3", 100, 100, 175, allDiscounts().getDiscountByCoupon("OFR003"))
-	pkg4 := NewPackage("PKG4", 100, 60, 110, allDiscounts().getDiscountByCoupon("OFR002"))
-	pkg5 := NewPackage("PKG5", 100, 95, 155, allDiscounts().getDiscountByCoupon("NA"))
+	pkg1 := NewPackage("PKG1", 100, 30, 50, MockAllDiscounts().GetDiscountByCoupon([]string{"OFR001"}))
+	pkg2 := NewPackage("PKG2", 100, 125, 75, MockAllDiscounts().GetDiscountByCoupon([]string{"OFR008"}))
+	pkg3 := NewPackage("PKG3", 100, 100, 175, MockAllDiscounts().GetDiscountByCoupon([]string{"OFR003"}))
+	pkg4 := NewPackage("PKG4", 100, 60, 110, MockAllDiscounts().GetDiscountByCoupon([]string{"OFR002"}))
+	pkg5 := NewPackage("PKG5", 100, 95, 155, MockAllDiscounts().GetDiscountByCoupon([]string{"NA"}))
 
 	allPackages := NewPackages(pkg1, pkg2, pkg3, pkg4, pkg5)
 	sort.Sort(allPackages)
-	if allPackages[0].weight != expectedMaxWeighPackage {
+	if allPackages[0].Weight != expectedMaxWeighPackage {
 		t.Fatal("sorting of descending failed")
 	}
 
-	if allPackages[4].weight != expectedMinWeighPackage {
+	if allPackages[4].Weight != expectedMinWeighPackage {
 		t.Fatal("sorting of descending failed")
 	}
 }

@@ -1,4 +1,4 @@
-package main
+package delivery
 
 // Packages
 // Array of Package.
@@ -7,7 +7,7 @@ type Packages []*Package
 // Implementing sort.Sort interface
 func (me Packages) Len() int           { return len(me) }
 func (me Packages) Swap(i, j int)      { me[i], me[j] = me[j], me[i] }
-func (me Packages) Less(i, j int) bool { return me[i].weight > me[j].weight }
+func (me Packages) Less(i, j int) bool { return me[i].Weight < me[j].Weight }
 
 func NewPackages(pkgs ...*Package) Packages {
 	packages := Packages{}
@@ -23,7 +23,7 @@ func NewPackages(pkgs ...*Package) Packages {
 func (me Packages) GetTotalWeight() int {
 	weight := 0
 	for _, p := range me {
-		weight += p.weight
+		weight += p.Weight
 	}
 	return weight
 }
@@ -38,7 +38,7 @@ func (me Packages) GetTotalWeight() int {
 // TODO:: This function can be improved
 func (me Packages) SetDeliveryTimeForPackages(maxSpeed int, additionalTime float32) {
 	for _, p := range me {
-		p.deliveryTime = roundoff(additionalTime + float32(p.distance)/float32(maxSpeed))
+		p.DeliveryTime = roundoff(additionalTime + float32(p.Distance)/float32(maxSpeed))
 	}
 }
 
@@ -48,11 +48,23 @@ func (me Packages) SetDeliveryTimeForPackages(maxSpeed int, additionalTime float
 func (me Packages) GetTotalDeliveryTime() float32 {
 	var deliveryTime float32
 	for _, p := range me {
-		if deliveryTime < p.deliveryTime {
-			deliveryTime = p.deliveryTime
+		if deliveryTime < p.DeliveryTime {
+			deliveryTime = p.DeliveryTime
 		}
 	}
 	return deliveryTime
+}
+
+// HasPackageWithID
+// Checks whether the package exists or not
+// @return bool
+func (me Packages) ContainsPackage(pack *Package) bool {
+	for _, p := range me {
+		if p.Id == pack.Id {
+			return true
+		}
+	}
+	return false
 }
 
 // CalculateDeliveryCost
